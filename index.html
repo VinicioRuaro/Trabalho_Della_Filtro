@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="description" content="First Steps in Image Processing">
+    <meta name="keywords" content="Image Processing, Computer Graphics, UENP, JavaScript">
+    <meta name="author" content="Wellington Della Mura">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using Coordinates in Image Processing</title>
+
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+    <script src="main.js" defer></script>
+    
+</head>
+<body>
+    <input type="file" id="fileLoader" class="hidden">
+    <div class="container mx-auto">
+        
+        <h1 class="text-center font-bold text-2xl">Trabalho </h1>
+        <div class="mb-4 mt-4">
+
+            <! – Carregar Imagem ->
+                <button class="bg-blue-500 text-white py-1 px-2" 
+                id="btnCarregar">Carregar Imagem</button>
+
+            <! – Desfoque gaussiano ->
+                <button class="bg-gray-700 text-white py-1 px-2" 
+                id="btnDesfoqueGaussiano">Desfoque Gaussiano</button>
+
+            <! – Suavização Media ->
+                <button class="bg-gray-700 text-white py-1 px-2" 
+                id="btnMedia">Media</button>
+
+            <! – Suavização Mediana ->
+                <button class="bg-gray-700 text-white py-1 px-2" 
+                id="btnMediana">Mediana</button>
+
+            <! – Conversão NTSC ->
+                <button class="bg-gray-900 text-white py-1 px-2" 
+                id="btnNTSC">Conversão NTSC</button>
+                
+            <! – Conversão Media ->
+                <button class="bg-gray-500 text-white py-1 px-2" 
+                id="btnConversaomedia">Conversão Media</button>
+
+            <! – Binarização ->
+                <button class="bg-gray-500 text-white py-1 px-2" 
+                id="btnBinarizacao">Binarização</button>
+
+            <! – Virar a direita 90 ->
+                <button class="bg-red-700 text-white py-1 px-2" 
+                id="btndireita90">Virar 90º a direita</button>
+            
+            <! – Virar direita 180  ->
+                <button class="bg-red-700 text-white py-1 px-2" 
+                id="btndireta180">Virar 180º a direita</button>
+            
+            <! – Virar direita 270  ->
+                <button class="bg-red-700 text-white py-1 px-2" 
+                id="btndireta270">Virar 270º a direita</button>
+
+            <! – Virar a esquerda 90 ->
+                <button class="bg-red-900 text-white py-1 px-2" 
+                id="btnesquerda90">Virar 90º a esquerda</button>
+            
+            <! – Virar esquerda 180  ->
+                <button class="bg-red-900 text-white py-1 px-2" 
+                id="btnesquerda180">Virar 180º a esquerda</button>
+            
+            <! – Virar esquerda 270  ->
+                <button class="bg-red-900 text-white py-1 px-2" 
+                id="btnesquerda270">Virar 270º a esquerda</button>
+
+            <! – Redimensionar 4X  ->
+                <button class="bg-green-700 text-white py-1 px-2" 
+                id="Redimensionar4">Redimensionar 4X</button>
+
+            <! – Redimensionar 2X  ->
+                <button class="bg-green-700 text-white py-1 px-2" 
+                id="btnRedimensionar2">Redimensionar 2X</button>
+
+            <! – Redimensionar 1/2  ->
+                <button class="bg-green-500 text-white py-1 px-2" 
+                id="btnRedimensionar12">Redimensionar 1/2</button>
+
+            <! – Redimensionar 1/4  ->
+                <button class="bg-green-500 text-white py-1 px-2" 
+                id="btnRedimensionar14">Redimensionar 1/4</button>
+
+
+        </div>
+        <div class="flex">
+            <div class="w-1/2 border-2 p-3 mr-3">
+                <h1 class="font-bold text-2xl text-center pb-4">Original</h1>
+                <img id="image" src="images/clown-fish.jpg" class="m-auto" />
+            </div>
+            <div class="w-1/2 border-2 p-3">
+                <h1 class="font-bold text-2xl text-center pb-4">Processed</h1>
+                <canvas id="image-canvas" class="m-auto"></canvas>                
+            </div>
+        </div>
+    </div>
+            
+</body>
+</html>
