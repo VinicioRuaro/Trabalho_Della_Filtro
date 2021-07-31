@@ -2,6 +2,7 @@ var fileLoader = document.getElementById('fileLoader');
 var image = document.getElementById('image');
 var canvas = document.getElementById('image-canvas');
 var context = null;
+var grau = 0;
 
 let loadFromFile = function(){
     fileLoader.click();
@@ -16,49 +17,96 @@ let load = function (){
     canvas.width = image.width;
     canvas.height = image.height;
     context.drawImage(image, 0, 0);
+
 }
 
 let desfoqueGaussiano = function() {
     let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     let img = new MatrixImage(imageData);
     var imgori= new MatrixImage(imageData);
-    /*
+    //*
+
+    // Feito com kenel 3x3 sem tranformar em hsl
     for (var i = 2; i < img.width-2; i++) {
         for (var j = 2; j < img.height-2; j++) {
             
             var soma=0;
-            var ajuda;
+            var ajuda=0;
+            var red=0;
+            var green=0;
+            var blue=0;
             
-            ajuda=RGBParaHSL(img.getPixel(i-1,j-1).red,img.getPixel(i-1,j-1).green,img.getPixel(i-1,j-1).blue)[0];
-            soma=soma+ajuda;
-            ajuda=RGBParaHSL(img.getPixel(i-1,j).red,img.getPixel(i-1,j).green,img.getPixel(i-1,j).blue)[0];
-            ajuda=ajuda*2;
-            soma=soma+ajuda;
-            ajuda=RGBParaHSL(img.getPixel(i,j-1).red,img.getPixel(i,j-1).green,img.getPixel(i,j-1).blue)[0];  
-            ajuda=ajuda*2;
-            soma=soma+ajuda;
-            ajuda=RGBParaHSL(img.getPixel(i+1,j-1).red,img.getPixel(i+1,j-1).green,img.getPixel(i+1,j-1).blue)[0];     
-            soma=soma+ajuda;   
-            ajuda=RGBParaHSL(img.getPixel(i,j).red,img.getPixel(i,j).green,img.getPixel(i,j).blue)[0];
-            ajuda=ajuda*4;
-            soma=soma+ajuda;
-            ajuda=RGBParaHSL(img.getPixel(i-1,j+1).red,img.getPixel(i-1,j+1).green,img.getPixel(i-1,j+1).blue)[0];
-            soma=soma+ajuda;
-            ajuda=RGBParaHSL(img.getPixel(i,j+1).red,img.getPixel(i,j+1).green,img.getPixel(i,j+1).blue)[0];
-            ajuda=ajuda*2;
-            soma=soma+ajuda;
-            ajuda=RGBParaHSL(img.getPixel(i+1,j).red,img.getPixel(i+1,j).green,img.getPixel(i+1,j).blue)[0];
-            ajuda=ajuda*2;
-            soma=soma+ajuda;
-            ajuda=RGBParaHSL(img.getPixel(i+1,j+1).red,img.getPixel(i+1,j+1).green,img.getPixel(i+1,j+1).blue)[0];
-            soma=soma+ajuda;
-            var hsldividido =soma/12;
-            var rgb = HSLToRGB(hsldividido,RGBParaHSL(img.getPixel(i,j).red,img.getPixel(i,j).green,img.getPixel(i,j).blue)[1],RGBParaHSL(img.getPixel(i,j).red,img.getPixel(i,j).green,img.getPixel(i,j).blue)[2]);
+            ajuda = img.getPixel(i-1,j-1).red;
+            red= red+ ajuda;
+            ajuda = img.getPixel(i-1,j).red*2;
+            red= red+ ajuda;
+            ajuda = img.getPixel(i-1,j+1).red;
+            red= red+ ajuda;
+            ajuda = img.getPixel(i,j-1).red*2;
+            red= red+ ajuda;
+            ajuda = img.getPixel(i,j).red*4;
+            red= red+ ajuda;
+            ajuda = img.getPixel(i,j+1).red*2;
+            red= red+ ajuda;
+            ajuda = img.getPixel(i+1,j-1).red;
+            red= red+ ajuda;
+            ajuda = img.getPixel(i+1,j).red*2;
+            red= red+ ajuda;
+            ajuda = img.getPixel(i+1,j+1).red;
+            red= red+ ajuda;
             
+            ajuda = img.getPixel(i-1,j-1).green;
+            green= green+ ajuda;
+            ajuda = img.getPixel(i-1,j).green*2;
+            green= green+ ajuda;
+            ajuda = img.getPixel(i-1,j+1).green;
+            green= green+ ajuda;
+            ajuda = img.getPixel(i,j-1).green*2;
+            green= green+ ajuda;
+            ajuda = img.getPixel(i,j).green*4;
+            green= green+ ajuda;
+            ajuda = img.getPixel(i,j+1).green*2;
+            green= green+ ajuda;
+            ajuda = img.getPixel(i+1,j-1).green;
+            green= green+ ajuda;
+            ajuda = img.getPixel(i+1,j).green*2;
+            green= green+ ajuda;
+            ajuda = img.getPixel(i+1,j+1).green;
+            green= green+ ajuda;
+
+            ajuda = img.getPixel(i-1,j-1).blue;
+            blue= blue+ ajuda;
+            ajuda = img.getPixel(i-1,j).blue*2;
+            blue= blue+ ajuda;
+            ajuda = img.getPixel(i-1,j+1).blue;
+            blue= blue+ ajuda;
+            ajuda = img.getPixel(i,j-1).blue*2;
+            blue= blue+ ajuda;
+            ajuda = img.getPixel(i,j).blue*4;
+            blue= blue+ ajuda;
+            ajuda = img.getPixel(i,j+1).blue*2;
+            blue= blue+ ajuda;
+            ajuda = img.getPixel(i+1,j-1).blue;
+            blue= blue+ ajuda;
+            ajuda = img.getPixel(i+1,j).blue*2;
+            blue= blue+ ajuda;
+            ajuda = img.getPixel(i+1,j+1).blue;
+            blue= blue+ ajuda;
+
+            red=red/16;
+            green=green/16;
+            blue=blue/16;
+
             
-            img.setPixel(i, j, new RGBColor(rgb[0], rgb[1], rgb[2]));
+            img.setPixel(i, j, new RGBColor(red, green, blue));
         }
-        */
+        }
+        //*/
+        /*
+
+
+
+        // Feito com kenel 3x3 tranformando em HSL        
         for (var i = 2; i < img.width-2; i++) {
             for (var j = 2; j < img.height-2; j++) {
                 
@@ -95,6 +143,7 @@ let desfoqueGaussiano = function() {
                 img.setPixel(i, j, new RGBColor(rgb[0], rgb[1], rgb[2]));
             }
     }
+    */
     context.putImageData(img.imageData, 0, 0);
 }
 
@@ -103,6 +152,8 @@ let media = function() {
     let img = new MatrixImage(imageData);
     let imgori = new MatrixImage(imageData);
     //*
+
+    // Media sem tranformar em HSL 3x3
     for (var i = 2; i < img.width-2; i++) {
         for (var j = 2; j < img.height-2; j++) {
             
@@ -128,44 +179,125 @@ let media = function() {
     }
         //*/
        /*
+        // Media tranformando em HSL 3x3
+
         for (var i = 2; i < img.width-2; i++) {
             for (var j = 2; j < img.height-2; j++) {
                 
                 var soma=0;
                 var ajuda;
                 
-                
                 ajuda=RGBParaHSL(imgori.getPixel(i-1,j-1).red,imgori.getPixel(i-1,j-1).green,imgori.getPixel(i-1,j-1).blue)[0];
-                
                 soma=soma+ajuda;
-                /
                 ajuda=RGBParaHSL(imgori.getPixel(i-1,j).red,imgori.getPixel(i-1,j).green,imgori.getPixel(i-1,j).blue)[0];
+                
                 soma=soma+ajuda;
                 ajuda=RGBParaHSL(imgori.getPixel(i,j-1).red,imgori.getPixel(i,j-1).green,imgori.getPixel(i,j-1).blue)[0];  
+                
                 soma=soma+ajuda;
                 ajuda=RGBParaHSL(imgori.getPixel(i+1,j-1).red,imgori.getPixel(i+1,j-1).green,imgori.getPixel(i+1,j-1).blue)[0];     
                 soma=soma+ajuda;   
                 ajuda=RGBParaHSL(imgori.getPixel(i,j).red,imgori.getPixel(i,j).green,imgori.getPixel(i,j).blue)[0];
+
                 soma=soma+ajuda;
                 ajuda=RGBParaHSL(imgori.getPixel(i-1,j+1).red,imgori.getPixel(i-1,j+1).green,imgori.getPixel(i-1,j+1).blue)[0];
+                
                 soma=soma+ajuda;
                 ajuda=RGBParaHSL(imgori.getPixel(i,j+1).red,imgori.getPixel(i,j+1).green,imgori.getPixel(i,j+1).blue)[0];
+                
                 soma=soma+ajuda;
                 ajuda=RGBParaHSL(imgori.getPixel(i+1,j).red,imgori.getPixel(i+1,j).green,imgori.getPixel(i+1,j).blue)[0];
+                
                 soma=soma+ajuda;
                 ajuda=RGBParaHSL(imgori.getPixel(i+1,j+1).red,imgori.getPixel(i+1,j+1).green,imgori.getPixel(i+1,j+1).blue)[0];
                 soma=soma+ajuda;
                 var hsldividido =soma/9;
-                
                 var rgb = HSLToRGB(hsldividido,RGBParaHSL(img.getPixel(i,j).red,img.getPixel(i,j).green,img.getPixel(i,j).blue)[1],RGBParaHSL(img.getPixel(i,j).red,img.getPixel(i,j).green,img.getPixel(i,j).blue)[2]);
                 
-                red = rgb[0];
-                green=rgb[1];
-                blue=rgb[2];
                 
-                img.setPixel(i, j, new RGBColor(red, green, blue));
+                img.setPixel(i, j, new RGBColor(rgb[0], rgb[1], rgb[2]));
             }
     }   */
+    
+    context.putImageData(img.imageData, 0, 0);
+}
+
+let mediana = function() {
+    let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    let img = new MatrixImage(imageData);
+    //*
+
+    // Media sem tranformar em HSL 3x3
+    for (var i = 2; i < img.width-2; i++) {
+        for (var j = 2; j < img.height-2; j++) {
+            
+            var soma=0;
+            var ajuda;
+            
+            var red = Array();
+            var green = Array();
+            var blue = Array();
+
+            
+            red.push(img.getPixel(i-1,j-1).red);
+            green.push(img.getPixel(i-1,j-1).green);
+            blue.push(img.getPixel(i-1,j-1).blue);
+
+            red.push(img.getPixel(i-1,j).red);
+            green.push(img.getPixel(i-1,j).green);
+            blue.push(img.getPixel(i-1,j).blue);
+           
+            red.push(img.getPixel(i-1,j+1).red);
+            green.push(img.getPixel(i-1,j+1).green);
+            blue.push(img.getPixel(i-1,j+1).blue);
+
+            red.push(img.getPixel(i,j-1).red);
+            green.push(img.getPixel(i,j-1).green);
+            blue.push(img.getPixel(i,j-1).blue);
+
+            red.push(img.getPixel(i,j).red);
+            green.push(img.getPixel(i,j).green);
+            blue.push(img.getPixel(i,j).blue);
+
+            red.push(img.getPixel(i,j+1).red);
+            green.push(img.getPixel(i,j+1).green);
+            blue.push(img.getPixel(i,j+1).blue);
+            
+            red.push(img.getPixel(i+1,j-1).red);
+            green.push(img.getPixel(i+1,j-1).green);
+            blue.push(img.getPixel(i+1,j-1).blue);
+
+            red.push(img.getPixel(i+1,j).red);
+            green.push(img.getPixel(i+1,j).green);
+            blue.push(img.getPixel(i+1,j).blue);
+
+            red.push(img.getPixel(i+1,j+1).red);
+            green.push(img.getPixel(i+1,j+1).green);
+            blue.push(img.getPixel(i+1,j+1).blue);
+            
+            
+            red.sort(function compare(a, b) {
+                if (a < b) return -1;
+                if (a > b) return 1;
+                return 0;
+            })
+            green.sort(function compare(a, b) {
+                if (a < b) return -1;
+                if (a > b) return 1;
+                return 0;
+            })
+            blue.sort(function compare(a, b) {
+                if (a < b) return -1;
+                if (a > b) return 1;
+                return 0;
+            })
+            
+            
+            
+            
+            img.setPixel(i, j, new RGBColor(red[4], green[4], blue[4]));
+        }
+    }
     
     context.putImageData(img.imageData, 0, 0);
 }
@@ -188,7 +320,20 @@ let binarizacao = function() {
     context.putImageData(img.imageData, 0, 0);
 }
 
-let grayScale = function() {
+let grayScaleNTSC = function() {
+    let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
+    let img = new MatrixImage(imageData);
+    for (var i = 0; i < img.width; i++) {
+        for (var j = 0; j < img.height; j++) {
+            var pixel = img.getPixel(i,j);
+            var gray = pixel.red*0.33 + pixel.green*0.71 + pixel.blue*0.88; 
+            img.setPixel(i, j, new RGBColor(gray, gray, gray));
+        }
+    }
+    context.putImageData(img.imageData, 0, 0);
+}
+
+let grayScalemedia = function() {
     let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
     let img = new MatrixImage(imageData);
     for (var i = 0; i < img.width; i++) {
@@ -201,27 +346,22 @@ let grayScale = function() {
     context.putImageData(img.imageData, 0, 0);
 }
 
-let mean = function() {
-    let imageData = context.getImageData(0, 0, canvas.width, canvas.height);
-    let img = new MatrixImage(imageData);
-    for (var i = 2; i < img.width-2; i++) {
-        for (var j = 2; j < img.height-2; j++) {
-            var pixel = Array();
-            pixel.push(img.getPixel(i-1,j-1).red);
-            pixel.push(img.getPixel(i-1,j).red);
-            pixel.push(img.getPixel(i,j-1).red);
-            pixel.push(img.getPixel(i+1,j-1).red);
-            pixel.push(img.getPixel(i,j).red);
-            pixel.push(img.getPixel(i-1,j+1).red);
-            pixel.push(img.getPixel(i,j+1).red);
-            pixel.push(img.getPixel(i+1,j).red);
-            pixel.push(img.getPixel(i+1,j+1).red);
-            var gray = pixel.reduce((a, b) => a + b, 0) / 9;
-    
-            img.setPixel(i, j, new RGBColor(gray, gray, gray));
-        }
-    }
-    context.putImageData(img.imageData, 0, 0);
+let redimensionar = function () {
+
+    canvas.height = canvas.width * (image.height / image.width);
+
+    // step 1 - resize to 50%
+    var oc = document.createElement('canvas'),octx = oc.getContext('2d');
+
+    oc.width = img.width * 0.5;
+    oc.height = img.height * 0.5;
+    octx.drawImage(img, 0, 0, oc.width, oc.height);
+
+    // step 2
+    octx.drawImage(oc, 0, 0, oc.width * 0.5, oc.height * 0.5);
+
+    // step 3, resize to final size
+    context.drawImage(oc, 0, 0, oc.width * 0.5, oc.height * 0.5,0, 0, canvas.width, canvas.height);
 }
 
 class RGBColor {
@@ -339,22 +479,64 @@ function HSLToRGB(h,s,l) {
 
     return rgb;
 
-  }
+}
 
+let rodar = function() {
+
+    
+    grau=grau+ 90;
+    if(grau==360){
+        grau=0;
+    }
+    context.clearRect(0,0,canvas.width,canvas.height);
+    context.save();
+    canvas.width = image.height;
+    canvas.height = image.width;
+    if (grau==180||grau==0) {
+        context.translate(canvas.width/2,canvas.height/2);
+        context.rotate(grau * Math.PI / 180);
+        context.drawImage(image, -image.width/2, -image.height/2);
+        context.restore();
+
+    }
+    else{
+        context.translate(canvas.width/2,canvas.height/2);
+        context.rotate(grau * Math.PI / 180);
+        context.drawImage(image, -image.width/2, -image.height/2);
+        context.restore();
+    }
+}
+
+let rodar90d = function(){
+    rodar();
+}
+
+let rodar180d = function(){
+    rodar();
+    rodar();
+}
+
+let rodar270d = function(){
+    rodar();
+    rodar();
+    rodar();
+}
+
+  
 document.getElementById('btnCarregar').addEventListener('click', load);
 document.getElementById('btnDesfoqueGaussiano').addEventListener('click', desfoqueGaussiano);
 document.getElementById('btnMedia').addEventListener('click', media);
-document.getElementById('btnMediana').addEventListener('click', mean);
-document.getElementById('btnNTSC').addEventListener('click', mean);
-document.getElementById('btnConversaomedia').addEventListener('click', mean);
+document.getElementById('btnMediana').addEventListener('click', mediana);
+document.getElementById('btnNTSC').addEventListener('click', grayScaleNTSC);
+document.getElementById('btnConversaomedia').addEventListener('click', grayScalemedia);
 document.getElementById('btnBinarizacao').addEventListener('click',binarizacao);
-document.getElementById('btndireita90').addEventListener('click', mean);
-document.getElementById('btndireta180').addEventListener('click', mean);
-document.getElementById('btndireta270').addEventListener('click', mean);
-document.getElementById('btnesquerda90').addEventListener('click', mean);
-document.getElementById('btnesquerda180').addEventListener('click', mean);
-document.getElementById('btnesquerda270').addEventListener('click', mean);
-document.getElementById('Redimensionar4').addEventListener('click', mean);
+document.getElementById('btndireita90').addEventListener('click',rodar90d);
+document.getElementById('btndireta180').addEventListener('click', rodar180d);
+document.getElementById('btndireta270').addEventListener('click', rodar270d);
+document.getElementById('btnesquerda90').addEventListener('click', rodar270d);
+document.getElementById('btnesquerda180').addEventListener('click', rodar180d);
+document.getElementById('btnesquerda270').addEventListener('click', rodar90d);
+document.getElementById('Redimensionar4').addEventListener('click', redimensionar);
 document.getElementById('btnRedimensionar2').addEventListener('click', mean);
 document.getElementById('btnRedimensionar12').addEventListener('click', mean);
 document.getElementById('btnRedimensionar14').addEventListener('click', mean);
